@@ -1,0 +1,15 @@
+{
+:global avgRttA 0
+:global numPing 4
+:global toPingIP1 8.8.8.8
+:for tmpA from=1 to=$numPing step=1 do={
+    /tool flood-ping count=1 size=38 address=$toPingIP1 do={
+        :set avgRttA ($"avg-rtt" + $avgRttA)
+    }
+    /delay 1s
+}
+:if (($avgRttA / $numPing) > 20) do={
+/tool fetch url="https://api.telegram.org/bot5071487987:AAFE1UHQujNQeVISUX4x9JMX23vy_Srztd0/sendmessage?chat_id=-715813562&text=$[/system identity get name] to 8.8.8.8: $($avgRttA / $numPing)ms"
+
+}
+}
