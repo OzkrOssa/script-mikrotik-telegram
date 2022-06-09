@@ -1,0 +1,19 @@
+{
+:global lumen 0
+:global timer 18
+
+/interface monitor-traffic interface=sfp-sfpplus1 once do={
+:log info $"rx-bits-per-second"
+        :set lumen ($"rx-bits-per-second")
+    }
+/delay 1s
+
+
+
+:if ($lumen < 100000000) do={
+/tool fetch url="https://api.telegram.org/bot5071487987:AAFE1UHQujNQeVISUX4x9JMX23vy_Srztd0/sendmessage?chat_id=-715813562&text=$[/system identity get name], el trafico cayo a menos de  100M"
+} else={
+:if ($lumen > 1950000000) do={
+/tool fetch url="https://api.telegram.org/bot5071487987:AAFE1UHQujNQeVISUX4x9JMX23vy_Srztd0/sendmessage?chat_id=-715813562&text=$[/system identity get name], el trafico superto el umbral de 1.9G"
+}
+}
