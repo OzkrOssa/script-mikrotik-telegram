@@ -1,0 +1,19 @@
+:global backupconf "$[/system identity get name]-$[/system clock get time]-CONF.backup"
+:global backuprsc "$[/system identity get name]-$[/system clock get time]-RSC.rsc"
+
+:log info "Backup Configurations $backupconf"
+/system backup save name=$backupconf
+:log info "Backup pausing for 2s"
+:delay 2s
+
+:log info "Backup log $backuprsc"
+/export file=$backuprsc
+
+:delay 3
+
+:log info "Backup being emailed"
+/tool e-mail send to="soporte.redplanet@gmail.com" subject="$[/system identity get name]-$[/system clock get time] Backup Configuration" file="$backupconf,$backuprsc"
+
+:delay 10
+:log info "Removing Files"
+/file remove "$backupconf,$backuprsc"
